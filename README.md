@@ -10,7 +10,7 @@ Lints and tests a frontend application.
 ## Example usage
 
 ```
-uses: interdiscount/github-actions-lint-test-frontend@main
+uses: interdiscount/github-actions-lint-test-frontend@v1
 with:
   interdiscount-coop-user-pw: ${{ secrets.INTERDISCOUNT_COOP_USER_PW }}
 ```
