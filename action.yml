@@ -1,0 +1,39 @@
+name: Lint and test code
+description: Runs linters and tests
+
+inputs:
+  interdiscount-coop-user-pw:
+    description: Coop user password to access private GitHub npm registry
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Set timezone to Zurich
+      shell: bash
+      run: sudo timedatectl set-timezone Europe/Zurich
+
+    - name: Install node packages
+      shell: bash
+      run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.interdiscount-coop-user-pw }}
+
+    - name: Lint CSS
+      shell: bash
+      run: npm run stylelint
+
+    - name: Lint JavaScript
+      shell: bash
+      run: npm run lint:ci
+
+    - name: Run unit tests
+      shell: bash
+      run: npm run test:ci
