@@ -9,12 +9,12 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/cache@v2
+    - uses: actions/setup-node@v1
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        node-version: 12.x
+        registry-url: https://npm.pkg.github.com
+        scope: '@interdiscount'
+        cache: 'npm'
 
     - name: Set timezone to Zurich
       shell: bash
