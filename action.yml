@@ -5,6 +5,12 @@ inputs:
   interdiscount-coop-user-pw:
     description: Coop user password to access private GitHub npm registry
     required: true
+  interdiscount-sonar-token:
+    description: Token to access Interdiscount SonarCloud project for the sonar scanner
+    required: true
+  interdiscount-github-token:
+    description: Token of the calling GitHub action for the sonar scannner
+    required: true
 
 runs:
   using: composite
@@ -48,5 +54,5 @@ runs:
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ inputs.interdiscount-sonar-token }}
+        GITHUB_TOKEN: ${{ inputs.interdiscount-github-token }}
