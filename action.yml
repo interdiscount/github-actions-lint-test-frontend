@@ -5,10 +5,24 @@ inputs:
   interdiscount-coop-user-pw:
     description: Coop user password to access private GitHub npm registry
     required: true
+  interdiscount-sonar-token:
+    description: Token to access Interdiscount SonarCloud project for the sonar scanner
+    required: true
+  interdiscount-github-token:
+    description: Token of the calling GitHub action for the sonar scannner
+    required: true
 
 runs:
   using: composite
   steps:
+
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v3
+      with:
+        path: /opt/sonar-scanner/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
     - uses: actions/setup-node@v3
       with:
         node-version: '18.x'
@@ -35,4 +49,10 @@ runs:
 
     - name: Run unit tests
       shell: bash
-      run: npm run test:ci
+      run: npm run test:cover
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ inputs.interdiscount-sonar-token }}
+        GITHUB_TOKEN: ${{ inputs.interdiscount-github-token }}
